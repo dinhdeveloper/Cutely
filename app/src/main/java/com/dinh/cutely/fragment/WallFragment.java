@@ -31,7 +31,7 @@ import retrofit2.Response;
 public class WallFragment extends Fragment {
 
     GridLayoutManager gridLayoutManager;
-    public RecyclerView recyclerView;
+    RecyclerView recyclerView;
     SanPhamAdapter sanPhamAdapter;
     List<SanPham> sanPhams;
     APIService apiServiceSP;
@@ -42,7 +42,6 @@ public class WallFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_wall, container, false);
-
         apiServiceSP = APIUntil.getServer();
         recyclerView = view.findViewById(R.id.rcWall);
         gridLayoutManager = new GridLayoutManager(getActivity(), 2);
@@ -53,24 +52,22 @@ public class WallFragment extends Fragment {
         moveTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getContext(), "ok", Toast.LENGTH_SHORT).show();
                 recyclerView.smoothScrollToPosition(0);
             }
         });
-        apiServiceSP.APIServiceSP().enqueue(new Callback<List<SanPham>>() {
+        //lấy dữ liệu từ service
+        apiServiceSP.APISPTangDan().enqueue(new Callback<List<SanPham>>() {
             @Override
             public void onResponse(Call<List<SanPham>> call, Response<List<SanPham>> response) {
                 sanPhams =  response.body();
                 sanPhamAdapter = new SanPhamAdapter(getContext(), sanPhams);
                 recyclerView.setAdapter(sanPhamAdapter);
             }
-
             @Override
             public void onFailure(Call<List<SanPham>> call, Throwable t) {
 
             }
         });
-
         return view;
     }
     

@@ -19,7 +19,8 @@
         <item
             android:id="@+id/nav_rate_us"
             android:icon="@drawable/ic_star_black_24dp"
-            android:title="Rate Us" />
+            android:title="Rate Us"
+            android:onClick="rateUs"/>
         <item
             android:id="@+id/nav_privacy"
             android:icon="@drawable/ic_sms_failed_black_24dp"

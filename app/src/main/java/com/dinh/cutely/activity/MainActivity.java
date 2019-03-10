@@ -1,6 +1,8 @@
 package com.dinh.cutely.activity;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,12 +34,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Fragment fragment = null;
-    ShareActionProvider shareActionProvider;
-    FloatingActionButton moveTop;
-    RecyclerView recyclerView;
-    SanPhamAdapter sanPhamAdapter;
-    List<SanPham> sanPhams;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,12 +43,6 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.replace(R.id.screen_area,fragment).commit();
-
-        moveTop = findViewById(R.id.fab);
-//        recyclerView = findViewById(R.id.rcWall);
-//        sanPhamAdapter = new SanPhamAdapter(MainActivity.this,
-//                sanPhams);
-//        recyclerView.setAdapter(sanPhamAdapter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -91,12 +81,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_auto) {
             return true;
         }
@@ -125,6 +110,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_rate_us) {
 
+
+
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_privacy) {
@@ -133,6 +120,7 @@ public class MainActivity extends AppCompatActivity
 
         }else if (id == R.id.nav_exit) {
             finish();
+            System.exit(0);
         }
 
         if (fragment != null) {
@@ -144,5 +132,21 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void rateUs(MenuItem item) {
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                try{
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("https://www.facebook.com/canhdinhptit")));
+                }catch (ActivityNotFoundException ex){
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("https://ttnoithat.000webhostapp.com/")));
+                }
+                return false;
+            }
+        });
     }
 }

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dinh.cutely.R;
@@ -57,6 +58,7 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ViewHold
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ShowImgActivity.class);
                     SanPham sanPham = sanPhams.get(getAdapterPosition());
+//                    Toast.makeText(context,"DAY ROI "+ sanPham.getHinhSP(), Toast.LENGTH_SHORT).show();
                     intent.putExtra("sp", sanPham);
                     v.getContext().startActivity(intent);
                     // gửi lệnh đến android system để mở màn hình 2.

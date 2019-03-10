@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class SanPham implements Serializable {
+    String url = "http://192.168.1.10/";
     @SerializedName("maSP")
     @Expose
     private Integer maSP;
@@ -18,6 +19,10 @@ public class SanPham implements Serializable {
     @SerializedName("HinhSP")
     @Expose
     private String hinhSP;
+
+    @SerializedName("YeuThich")
+    @Expose
+    private Integer yeuThich;
 
     public Integer getMaSP() {
         return maSP;
@@ -42,12 +47,21 @@ public class SanPham implements Serializable {
     public void setTenSP(String tenSP) {
         this.tenSP = tenSP;
     }
-
     public String getHinhSP() {
-        return hinhSP;
+        String hinh = url +hinhSP;
+        return hinh;
     }
 
     public void setHinhSP(String hinhSP) {
-        this.hinhSP = hinhSP;
+
+        this.hinhSP =  hinhSP;
+    }
+
+    public Integer getYeuThich() {
+        return yeuThich;
+    }
+
+    public void setYeuThich(Integer yeuThich) {
+        this.yeuThich = yeuThich;
     }
 }

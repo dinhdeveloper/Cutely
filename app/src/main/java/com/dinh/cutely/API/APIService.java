@@ -19,6 +19,6 @@ public interface APIService {
     @GET("sanpham/getDanhMucSP")
     Call<List<SanPham>> APIGetDanhMuc(@Query("id") int id);
 
-    @GET("sanpham/topMuoiSP")
-    Call<List<SanPham>> APITopMuoi();
+    @GET("sanpham/SanPhamTangDan")
+    Call<List<SanPham>> APISPTangDan();
 }
