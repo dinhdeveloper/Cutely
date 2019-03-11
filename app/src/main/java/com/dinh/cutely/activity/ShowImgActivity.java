@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.stream.MediaStoreImageThumbLoader;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.dinh.cutely.R;
 import com.dinh.cutely.model.SanPham;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -82,7 +84,7 @@ public class ShowImgActivity extends AppCompatActivity {
 
     private void addEvents() {
         // truyền ảnh và lấy ảnh
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         final SanPham sanPham = (SanPham) intent.getSerializableExtra("sp");
 //        Toast.makeText(this, "UK "+sanPham.getHinhSP(), Toast.LENGTH_SHORT).show();
         Glide.with(ShowImgActivity.this).load(sanPham.getHinhSP()).into(img);
@@ -101,26 +103,10 @@ public class ShowImgActivity extends AppCompatActivity {
                 AnIcon();
             }
         });
-        //Sự Kiện save
-
-//        bitmap = ((BitmapDrawable) img.getDrawable()).getBitmap();
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-//            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-//            PackageManager.PERMISSION_DENIED){
-//                String[] persion = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-//                requestPermissions(persion,WRITE_EXTERNAL);
-//            }else {
-//
-//            }
-//        }else {
-//
-//        }
 
         fab_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
 
 
             }
@@ -140,6 +126,22 @@ public class ShowImgActivity extends AppCompatActivity {
         fab_set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Glide.with(getApplicationContext()).asBitmap()
+                        .load(sanPham.getHinhSP())
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                try {
+                                    WallpaperManager manager = WallpaperManager.getInstance(getApplicationContext());
+                                    manager.setBitmap(resource);
+                                    Toast.makeText(ShowImgActivity.this, "Cài đặt thành công", Toast.LENGTH_SHORT).show();
+
+                                } catch (IOException e) {
+                                    Toast.makeText(ShowImgActivity.this, "faile", Toast.LENGTH_SHORT).show();
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
             }
         });
     }

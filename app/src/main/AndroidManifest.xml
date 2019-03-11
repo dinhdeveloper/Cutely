@@ -17,7 +17,7 @@
         <activity android:name=".activity.ShowImgActivity"></activity>
         <activity
             android:name=".activity.MainActivity"
-            android:label="Love Cute"
+            android:label="Hình Nền"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
