@@ -1,15 +1,25 @@
 package com.dinh.cutely.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.app.WallpaperManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -20,25 +30,39 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.stream.MediaStoreImageThumbLoader;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.dinh.cutely.R;
 import com.dinh.cutely.model.SanPham;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 
-public class ShowImgActivity extends AppCompatActivity{
+public class ShowImgActivity extends AppCompatActivity {
 
+    Bitmap bitmap;
+    private static final int WRITE_EXTERNAL = 1;
     ImageView img;
-    FloatingActionButton fabOption,favorites,fab_set,fab_save,fab_share,un_option;
-//    TextView txtSet,txtSave, txtShare;
+    FloatingActionButton fabOption, favorites, fab_set, fab_save, fab_share, un_option;
+
+    int Requescode = 656;
+
+    //    TextView txtSet,txtSave, txtShare;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_img);
 
         //Ánh xạ
-       addConTrol();
+        addConTrol();
 
         addEvents();
 
@@ -54,16 +78,12 @@ public class ShowImgActivity extends AppCompatActivity{
         fab_save = findViewById(R.id.fab_save);
         fab_share = findViewById(R.id.fab_share);
         un_option = findViewById(R.id.un_option);
-
-//        txtSet = findViewById(R.id.txtSet);
-//        txtSave = findViewById(R.id.txtSave);
-//        txtShare = findViewById(R.id.txtShare);
     }
 
     private void addEvents() {
         // truyền ảnh và lấy ảnh
         Intent intent = getIntent();
-        SanPham sanPham = (SanPham) intent.getSerializableExtra("sp");
+        final SanPham sanPham = (SanPham) intent.getSerializableExtra("sp");
 //        Toast.makeText(this, "UK "+sanPham.getHinhSP(), Toast.LENGTH_SHORT).show();
         Glide.with(ShowImgActivity.this).load(sanPham.getHinhSP()).into(img);
 
@@ -82,10 +102,27 @@ public class ShowImgActivity extends AppCompatActivity{
             }
         });
         //Sự Kiện save
+
+//        bitmap = ((BitmapDrawable) img.getDrawable()).getBitmap();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+//            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+//            PackageManager.PERMISSION_DENIED){
+//                String[] persion = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+//                requestPermissions(persion,WRITE_EXTERNAL);
+//            }else {
+//
+//            }
+//        }else {
+//
+//        }
+
         fab_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ShowImgActivity.this, "Save", Toast.LENGTH_SHORT).show();
+
+
+
+
             }
         });
         //Sự kiện share
@@ -103,27 +140,25 @@ public class ShowImgActivity extends AppCompatActivity{
         fab_set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ShowImgActivity.this, "SetImage", Toast.LENGTH_SHORT).show();
             }
         });
     }
-    private void HienThiIcon(){
+
+
+    private void HienThiIcon() {
         fab_set.show();
         fab_save.show();
         fab_share.show();
         un_option.show();
-//        txtSet.setVisibility(View.VISIBLE);
-//        txtShare.setVisibility(View.VISIBLE);
-//        txtSave.setVisibility(View.VISIBLE);
     }
 
-    private void AnIcon(){
+    private void AnIcon() {
         fab_set.hide();
         fab_save.hide();
         fab_share.hide();
         un_option.hide();
-//        txtSet.setVisibility(View.INVISIBLE);
-//        txtShare.setVisibility(View.INVISIBLE);
-//        txtSave.setVisibility(View.INVISIBLE);
     }
+
 }
+
+
