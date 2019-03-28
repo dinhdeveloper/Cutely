@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -33,11 +34,15 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
+    private static int SPLASH_TIME_OUT = 3000;
+
     Fragment fragment = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //add fragment
         fragment = new WallFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -104,7 +109,7 @@ public class MainActivity extends AppCompatActivity
             Intent ShareIntent = new Intent(Intent.ACTION_SEND);
             ShareIntent.setType("text/plain");
             ShareIntent.putExtra(Intent.EXTRA_SUBJECT, "the title");
-            ShareIntent.putExtra(Intent.EXTRA_TEXT, "my body text");
+            ShareIntent.putExtra(Intent.EXTRA_TEXT, "App gần xong :D :D");
             startActivity(Intent.createChooser(ShareIntent, "Share Using"));
 
 

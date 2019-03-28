@@ -14,10 +14,10 @@ public class LoaiSanPham {
     private String tenLSP;
     @SerializedName("hinhSLP")
     @Expose
-    private Object hinhSLP;
+    private String hinhSLP;
     @SerializedName("SanPhams")
     @Expose
-    private List<Object> sanPhams = null;
+    private List<SanPham> sanPhams = null;
 
     public Integer getMaLSP() {
         return maLSP;
@@ -35,19 +35,20 @@ public class LoaiSanPham {
         this.tenLSP = tenLSP;
     }
 
-    public Object getHinhSLP() {
+    public String getHinhSLP() {
         return hinhSLP;
     }
 
-    public void setHinhSLP(Object hinhSLP) {
+    public void setHinhSLP(String hinhSLP) {
         this.hinhSLP = hinhSLP;
     }
 
-    public List<Object> getSanPhams() {
+    public List<SanPham> getSanPhams() {
         return sanPhams;
     }
 
-    public void setSanPhams(List<Object> sanPhams) {
+    public void setSanPhams(List<SanPham> sanPhams) {
         this.sanPhams = sanPhams;
     }
+
 }

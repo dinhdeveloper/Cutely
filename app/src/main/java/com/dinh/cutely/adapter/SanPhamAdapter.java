@@ -3,6 +3,7 @@ package com.dinh.cutely.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,9 +50,10 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-
+        CardView cardView;
         public ViewHolder(@NonNull final View itemView) {
             super(itemView);
+            //cardView = itemView.findViewById(R.id.cvDiamond);
             imageView = itemView.findViewById(R.id.imageView);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -1,66 +1,52 @@
 package com.dinh.cutely.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.WallpaperManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.model.stream.MediaStoreImageThumbLoader;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.dinh.cutely.R;
 import com.dinh.cutely.model.SanPham;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.text.SimpleDateFormat;
 
 public class ShowImgActivity extends AppCompatActivity {
-
-    Bitmap bitmap;
-    private static final int WRITE_EXTERNAL = 1;
     ImageView img;
     FloatingActionButton fabOption, favorites, fab_set, fab_save, fab_share, un_option;
 
-    int Requescode = 656;
 
-    //    TextView txtSet,txtSave, txtShare;
+    boolean  doubleClick = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //fullscreen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_show_img);
 
         //Ánh xạ
@@ -107,10 +93,10 @@ public class ShowImgActivity extends AppCompatActivity {
         fab_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
             }
         });
+
+
         //Sự kiện share
         fab_share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +104,7 @@ public class ShowImgActivity extends AppCompatActivity {
                 Intent ShareIntent = new Intent(Intent.ACTION_SEND);
                 ShareIntent.setType("text/plain");
                 ShareIntent.putExtra(Intent.EXTRA_SUBJECT, "the title");
-                ShareIntent.putExtra(Intent.EXTRA_TEXT, "my body text");
+                ShareIntent.putExtra(Intent.EXTRA_TEXT, sanPham.getHinhSP());
                 startActivity(Intent.createChooser(ShareIntent, "Share Using"));
             }
         });
@@ -126,24 +112,60 @@ public class ShowImgActivity extends AppCompatActivity {
         fab_set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Glide.with(getApplicationContext()).asBitmap()
-                        .load(sanPham.getHinhSP())
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                try {
-                                    WallpaperManager manager = WallpaperManager.getInstance(getApplicationContext());
-                                    manager.setBitmap(resource);
-                                    Toast.makeText(ShowImgActivity.this, "Cài đặt thành công", Toast.LENGTH_SHORT).show();
 
-                                } catch (IOException e) {
-                                    Toast.makeText(ShowImgActivity.this, "faile", Toast.LENGTH_SHORT).show();
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
+               // AlertDialog.Builder builder = new AlertDialog.Builder(ShowImgActivity.this,R.style.AlertDialogCustom);
+               AlertDialog.Builder builder = new AlertDialog.Builder(ShowImgActivity.this);
+                builder.setTitle("Xác Nhận");
+                builder.setMessage("Bạn có muốn cài hình nền không?");
+                builder.setCancelable(true);
+                builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        Glide.with(getApplicationContext()).asBitmap()
+                                .load(sanPham.getHinhSP())
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                        // img.setImageBitmap(resource);
+                                        try {
+                                            WallpaperManager manager = WallpaperManager.getInstance(getApplicationContext());
+                                            manager.setBitmap(resource);
+                                            Toast.makeText(ShowImgActivity.this, "Cài đặt thành công", Toast.LENGTH_SHORT).show();
+
+                                        } catch (IOException e) {
+                                            Toast.makeText(ShowImgActivity.this, "Cài đặt không thành công", Toast.LENGTH_SHORT).show();
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+
+                    }
+                });
+                builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                final AlertDialog alertDialog = builder.create();
+                alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
+                    @SuppressLint("ResourceAsColor")
+                    @Override
+                    public void onShow(DialogInterface arg0) {
+                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#ecf0f1"));
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#ecf0f1"));
+                    }
+                });
+                alertDialog.show();
+                //set màu cho chữ xác nhận
+                int textViewId = alertDialog.getContext().getResources().getIdentifier("android:id/alertTitle", null, null);
+                TextView tv = (TextView) alertDialog.findViewById(textViewId);
+                tv.setTextColor(Color.parseColor("#ecf0f1"));
             }
         });
+        //set img
+
     }
 
 
@@ -160,7 +182,6 @@ public class ShowImgActivity extends AppCompatActivity {
         fab_share.hide();
         un_option.hide();
     }
-
 }
 
 
