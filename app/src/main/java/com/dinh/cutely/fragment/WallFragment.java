@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.dinh.cutely.API.APIService;
 import com.dinh.cutely.API.APIUntil;
 import com.dinh.cutely.R;
+import com.dinh.cutely.activity.MainActivity;
 import com.dinh.cutely.adapter.SanPhamAdapter;
 import com.dinh.cutely.model.SanPham;
 
@@ -58,7 +59,9 @@ public class WallFragment extends Fragment {
         //lấy dữ liệu từ service
         apiServiceSP.APISPTangDan().enqueue(new Callback<List<SanPham>>() {
             @Override
-            public void onResponse(Call<List<SanPham>> call, Response<List<SanPham>> response) {
+            public void onResponse(Call<List<SanPham>> call, Response<List<SanPham>> response)
+            {
+                //Toast.makeText(getContext(),sanPhams.get(), Toast.LENGTH_SHORT).show();
                 sanPhams =  response.body();
                 sanPhamAdapter = new SanPhamAdapter(getContext(), sanPhams);
                 recyclerView.setAdapter(sanPhamAdapter);
